@@ -44,6 +44,12 @@ loop-looper/
 
 Agents own git for this repo: after every change, stage, commit, and push to `origin` without waiting to be asked. Use a `moss:` prefix for session-driven commit messages. Never force-push or rewrite history unless explicitly requested.
 
+After every successful commit+push, report it in this exact style (short SHA + subject):
+
+```
+Committed and pushed: 851a094 — moss: refresh markdown docs and require auto commit/push
+```
+
 ## Agent-Friendly Notes
 
 - Repo root: `/Users/lex/github/loop-looper`.
