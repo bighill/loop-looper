@@ -7,12 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D72EC9D5301D80E7004CBF4E /* VideoLooper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72EC9D4301D80E7004CBF4E /* VideoLooper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D72EC9BB301D7F6F004CBF4E /* LoopLooper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoopLooper.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D72EC9D4301D80E7004CBF4E /* VideoLooper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoLooper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,7 +35,6 @@
 		D72EC9B2301D7F6F004CBF4E = {
 			isa = PBXGroup;
 			children = (
-				D72EC9D4301D80E7004CBF4E /* VideoLooper.swift */,
 				D72EC9BD301D7F6F004CBF4E /* LoopLooper */,
 				D72EC9BC301D7F6F004CBF4E /* Products */,
 			);
@@ -125,7 +122,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D72EC9D5301D80E7004CBF4E /* VideoLooper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

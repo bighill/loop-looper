@@ -18,7 +18,7 @@ struct VideoLooperView: UIViewControllerRepresentable {
         }
 
         let player = AVQueuePlayer()
-        let looper = AVPlayerLooper(player: player, templateItem: AVPlayerItem(asset: AVAsset(url: url)))
+        let looper = AVPlayerLooper(player: player, templateItem: AVPlayerItem(asset: AVURLAsset(url: url)))
 
         // Keep looper alive — AVPlayerLooper must be retained
         let proxy = LooperProxy(looper: looper)
