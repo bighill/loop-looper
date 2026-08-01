@@ -6,37 +6,83 @@ import AVKit
 struct VideoLooperView: UIViewControllerRepresentable {
     /// Active clip — change this to try a different video.
     /// Options: "boreal", "snow", "path", "river", "aerial"
-    private let videoName = "boreal"
+    private let videoName = "path"
 
-    func makeUIViewController(context: Context) -> AVPlayerViewController {
-        let controller = AVPlayerViewController()
-        controller.videoGravity = .resizeAspectFill
-        controller.showsPlaybackControls = false
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        let controller = PlayerViewController()
+        controller.view.backgroundColor = .black
 
         guard let url = Bundle.main.url(forResource: videoName, withExtension: "mp4") else {
             fatalError("Video file '\(videoName).mp4' not found in bundle. Add it to LoopLooper/video/.")
         }
 
+        let asset = AVURLAsset(url: url)
+        let item = AVPlayerItem(asset: asset)
         let player = AVQueuePlayer()
-        let looper = AVPlayerLooper(player: player, templateItem: AVPlayerItem(asset: AVURLAsset(url: url)))
+        let looper = AVPlayerLooper(player: player, templateItem: item)
 
-        // Keep looper alive — AVPlayerLooper must be retained
-        let proxy = LooperProxy(looper: looper)
-        controller.player = player
-        objc_setAssociatedObject(controller, &LooperProxy.associatedKey, proxy, .OBJC_ASSOCIATION_RETAIN)
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.videoGravity = .resizeAspectFill
+        controller.playerLayer = playerLayer
+        controller.view.layer.addSublayer(playerLayer)
 
-        player.play()
+        context.coordinator.player = player
+        context.coordinator.looper = looper
+        context.coordinator.playerLayer = playerLayer
+
+        // Local file — no need to stall for buffering
+        player.automaticallyWaitsToMinimizeStalling = false
+        player.isMuted = true
+        player.playImmediately(atRate: 1.0)
+
+        // Looper inserts copies of the template; retry play when the queued item is ready
+        context.coordinator.observeCurrentItem(on: player)
+
         return controller
     }
 
-    func updateUIViewController(_ uiViewController: AVPlayerViewController, context: Context) {}
-}
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        if let controller = uiViewController as? PlayerViewController {
+            controller.playerLayer?.frame = controller.view.bounds
+        }
+    }
 
-/// Wrapper to keep AVPlayerLooper alive for the lifetime of the controller.
-/// AVPlayerLooper must be retained or looping stops.
-private class LooperProxy {
-    let looper: AVPlayerLooper
-    init(looper: AVPlayerLooper) { self.looper = looper }
+    /// Hosts the player layer and keeps it sized to the view.
+    private final class PlayerViewController: UIViewController {
+        var playerLayer: AVPlayerLayer?
 
-    nonisolated(unsafe) static var associatedKey: UInt8 = 0
+        override func viewDidLayoutSubviews() {
+            super.viewDidLayoutSubviews()
+            playerLayer?.frame = view.bounds
+        }
+    }
+
+    final class Coordinator {
+        var player: AVQueuePlayer?
+        var looper: AVPlayerLooper?
+        var playerLayer: AVPlayerLayer?
+        private var itemObservation: NSKeyValueObservation?
+        private var statusObservation: NSKeyValueObservation?
+
+        func observeCurrentItem(on player: AVQueuePlayer) {
+            itemObservation = player.observe(\.currentItem, options: [.initial, .new]) { [weak self] player, _ in
+                self?.statusObservation?.invalidate()
+                guard let item = player.currentItem else { return }
+                self?.statusObservation = item.observe(\.status, options: [.initial, .new]) { item, _ in
+                    guard item.status == .readyToPlay else { return }
+                    player.playImmediately(atRate: 1.0)
+                }
+            }
+        }
+
+        deinit {
+            itemObservation?.invalidate()
+            statusObservation?.invalidate()
+            player?.pause()
+        }
+    }
 }
