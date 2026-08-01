@@ -30,15 +30,15 @@ loop-looper/
         ├── VideoLooper.swift     # AVPlayerLooper wrapper
         ├── Assets.xcassets/      # app icon, top shelf, accent
         └── video/                # bundled video files go here
-            └── README.md         # drop loop.mp4 here (gitignored)
+            └── README.md         # local *.mp4 clips (gitignored)
 ```
 
 ## Conventions
 
 - File names in PascalCase to match Swift/Xcode conventions.
 - Keep the app minimal. No features beyond looping unless explicitly asked.
-- Video files in `LoopLooper/LoopLooper/video/` — add to Xcode project as bundled resources.
-- Default bundled filename is `loop.mp4` (see `VideoLooper.swift`). Don't commit large video files; `.gitignore` covers `*.mp4`, `*.mov`, etc.
+- Video files in `LoopLooper/LoopLooper/video/` — folder sync bundles them as resources.
+- Active clip is `videoName` in `VideoLooper.swift` (`boreal`, `snow`, `path`, `river`, `aerial`). Don't commit large video files; `.gitignore` covers `*.mp4`, `*.mov`, etc.
 
 ## Git & Commits
 

@@ -4,14 +4,17 @@ import AVKit
 /// Seamless infinite video loop using AVPlayerLooper.
 /// Plays a single bundled video file full-screen, forever.
 struct VideoLooperView: UIViewControllerRepresentable {
+    /// Active clip — change this to try a different video.
+    /// Options: "boreal", "snow", "path", "river", "aerial"
+    private let videoName = "boreal"
+
     func makeUIViewController(context: Context) -> AVPlayerViewController {
         let controller = AVPlayerViewController()
         controller.videoGravity = .resizeAspectFill
         controller.showsPlaybackControls = false
 
-        // Load bundled video — update filename to match your video
-        guard let url = Bundle.main.url(forResource: "loop", withExtension: "mp4") else {
-            fatalError("Video file 'loop.mp4' not found in bundle. Add it to LoopLooper/video/ and add to Xcode project resources.")
+        guard let url = Bundle.main.url(forResource: videoName, withExtension: "mp4") else {
+            fatalError("Video file '\(videoName).mp4' not found in bundle. Add it to LoopLooper/video/.")
         }
 
         let player = AVQueuePlayer()

@@ -33,11 +33,13 @@ In Xcode:
 
 > **Note:** Free Apple ID signing expires after 7 days. Re-deploy from Xcode to refresh. A paid developer account ($99/year) extends this to 1 year.
 
-## Add your own video
+## Choose / add a video
 
-Drop `loop.mp4` into `LoopLooper/LoopLooper/video/`, then add it to the Xcode project as a bundled resource. Video files are gitignored.
+Test clips live in `LoopLooper/LoopLooper/video/` (gitignored). Switch the active one by changing `videoName` in `VideoLooper.swift`:
 
-To use a different filename, update the resource name in `VideoLooper.swift`.
+`boreal` · `snow` · `path` · `river` · `aerial`
+
+Drop any other `*.mp4` there and point `videoName` at its basename.
 
 ## Tech
 
