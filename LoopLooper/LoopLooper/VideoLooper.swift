@@ -20,27 +20,22 @@ struct VideoLooperView: UIViewControllerRepresentable {
             fatalError("Video file '\(videoName).mp4' not found in bundle. Add it to LoopLooper/video/.")
         }
 
-        let asset = AVURLAsset(url: url)
-        let item = AVPlayerItem(asset: asset)
         let player = AVQueuePlayer()
-        let looper = AVPlayerLooper(player: player, templateItem: item)
+        let looper = AVPlayerLooper(
+            player: player,
+            templateItem: AVPlayerItem(asset: AVURLAsset(url: url))
+        )
 
         let playerLayer = AVPlayerLayer(player: player)
         playerLayer.videoGravity = .resizeAspectFill
         controller.playerLayer = playerLayer
         controller.view.layer.addSublayer(playerLayer)
 
-        context.coordinator.player = player
-        context.coordinator.looper = looper
-        context.coordinator.playerLayer = playerLayer
+        // Keep player + looper alive via the coordinator (not locals / associated objects).
+        context.coordinator.attach(player: player, looper: looper, layer: playerLayer)
 
-        // Local file — no need to stall for buffering
-        player.automaticallyWaitsToMinimizeStalling = false
         player.isMuted = true
-        player.playImmediately(atRate: 1.0)
-
-        // Looper inserts copies of the template; retry play when the queued item is ready
-        context.coordinator.observeCurrentItem(on: player)
+        player.play()
 
         return controller
     }
@@ -49,6 +44,10 @@ struct VideoLooperView: UIViewControllerRepresentable {
         if let controller = uiViewController as? PlayerViewController {
             controller.playerLayer?.frame = controller.view.bounds
         }
+    }
+
+    static func dismantleUIViewController(_ uiViewController: UIViewController, coordinator: Coordinator) {
+        coordinator.teardown()
     }
 
     /// Hosts the player layer and keeps it sized to the view.
@@ -61,28 +60,24 @@ struct VideoLooperView: UIViewControllerRepresentable {
         }
     }
 
+    @MainActor
     final class Coordinator {
-        var player: AVQueuePlayer?
-        var looper: AVPlayerLooper?
-        var playerLayer: AVPlayerLayer?
-        private var itemObservation: NSKeyValueObservation?
-        private var statusObservation: NSKeyValueObservation?
+        private var player: AVQueuePlayer?
+        private var looper: AVPlayerLooper?
+        private var playerLayer: AVPlayerLayer?
 
-        func observeCurrentItem(on player: AVQueuePlayer) {
-            itemObservation = player.observe(\.currentItem, options: [.initial, .new]) { [weak self] player, _ in
-                self?.statusObservation?.invalidate()
-                guard let item = player.currentItem else { return }
-                self?.statusObservation = item.observe(\.status, options: [.initial, .new]) { item, _ in
-                    guard item.status == .readyToPlay else { return }
-                    player.playImmediately(atRate: 1.0)
-                }
-            }
+        func attach(player: AVQueuePlayer, looper: AVPlayerLooper, layer: AVPlayerLayer) {
+            self.player = player
+            self.looper = looper
+            self.playerLayer = layer
         }
 
-        deinit {
-            itemObservation?.invalidate()
-            statusObservation?.invalidate()
+        func teardown() {
             player?.pause()
+            playerLayer?.player = nil
+            playerLayer = nil
+            looper = nil
+            player = nil
         }
     }
 }
