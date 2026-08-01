@@ -18,35 +18,35 @@ A minimal tvOS app that bundles a single video file and loops it seamlessly full
 ## Structure
 
 ```
-foo-apple-tv-app/
+loop-looper/
 ├── AGENTS.md          # this file
 ├── README.md          # human overview
-├── LoopLooper/        # Xcode project + source
-│   ├── LoopLooper.xcodeproj/   # Xcode project (generated)
-│   ├── LoopLooper/
-│   │   ├── LoopLooperApp.swift   # app entry point
-│   │   ├── ContentView.swift     # main view (full-screen video)
-│   │   ├── VideoLooper.swift     # AVPlayerLooper wrapper
-│   │   ├── Assets.xcassets/      # app icon etc.
-│   │   └── video/                # bundled video files go here
-│   └── LoopLooperTests/
-│       └── LoopLooperTests.swift
+├── .gitignore         # ignores video media + Xcode user data
+└── LoopLooper/        # Xcode project + source
+    ├── LoopLooper.xcodeproj/   # Xcode project (folder bundle)
+    └── LoopLooper/
+        ├── LoopLooperApp.swift   # app entry point
+        ├── ContentView.swift     # main view (full-screen video)
+        ├── VideoLooper.swift     # AVPlayerLooper wrapper
+        ├── Assets.xcassets/      # app icon, top shelf, accent
+        └── video/                # bundled video files go here
+            └── README.md         # drop loop.mp4 here (gitignored)
 ```
 
 ## Conventions
 
-- File names in PascalCase to match Swift/Xcode conventions (this is an Xcode project, not the garden).
+- File names in PascalCase to match Swift/Xcode conventions.
 - Keep the app minimal. No features beyond looping unless explicitly asked.
 - Video files in `LoopLooper/LoopLooper/video/` — add to Xcode project as bundled resources.
-- Don't commit large video files to git. Use `.gitignore` for `*.mp4`, `*.mov`, etc.
+- Default bundled filename is `loop.mp4` (see `VideoLooper.swift`). Don't commit large video files; `.gitignore` covers `*.mp4`, `*.mov`, etc.
 
 ## Git & Commits
 
-Same rules as the garden. Stage, commit, push after every change. Use `moss:` prefix for session-driven changes.
+Agents own git for this repo: after every change, stage, commit, and push to `origin` without waiting to be asked. Use a `moss:` prefix for session-driven commit messages. Never force-push or rewrite history unless explicitly requested.
 
 ## Agent-Friendly Notes
 
-- This is a **sandbox directory** at `/Users/lex/tmp/foo-apple-tv-app`, separate from the garden workspace.
+- Repo root: `/Users/lex/github/loop-looper`.
 - Xcode projects are folder bundles — `LoopLooper.xcodeproj` is a directory, not a single file. Don't try to edit it as text.
-- The project can be opened in Xcode with `open LoopLooper/LoopLooper.xcodeproj`.
+- Open in Xcode with `open LoopLooper/LoopLooper.xcodeproj`.
 - For sideloading: connect Apple TV to the same network, select it as a run destination in Xcode, build and run.

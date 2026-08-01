@@ -35,10 +35,12 @@ In Xcode:
 
 ## Add your own video
 
-Drop a video file into `LoopLooper/LoopLooper/video/`, add it to the Xcode project as a bundled resource, and update the filename in `VideoLooper.swift`.
+Drop `loop.mp4` into `LoopLooper/LoopLooper/video/`, then add it to the Xcode project as a bundled resource. Video files are gitignored.
+
+To use a different filename, update the resource name in `VideoLooper.swift`.
 
 ## Tech
 
 - tvOS + SwiftUI
 - AVPlayerLooper + AVQueuePlayer for seamless looping
-- ~50 lines of Swift
+- ~60 lines of Swift
