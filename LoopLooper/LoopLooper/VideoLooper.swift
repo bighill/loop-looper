@@ -5,8 +5,8 @@ import AVKit
 /// Plays a single bundled video file full-screen, forever.
 struct VideoLooperView: UIViewControllerRepresentable {
     /// Active clip — change this to try a different video.
-    /// Options: "boreal", "snow", "path", "river", "aerial"
-    private let videoName = "boreal"
+    /// Options: "snow", "path", "aerial"
+    private let videoName = "snow"
 
     func makeCoordinator() -> Coordinator {
         Coordinator()

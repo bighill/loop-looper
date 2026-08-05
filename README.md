@@ -37,7 +37,7 @@ In Xcode:
 
 Test clips live in `LoopLooper/LoopLooper/video/` (gitignored). Switch the active one by changing `videoName` in `VideoLooper.swift`:
 
-`boreal` · `snow` · `path` · `river` · `aerial`
+`snow` · `path` · `aerial`
 
 Drop any other `*.mp4` there and point `videoName` at its basename.
 

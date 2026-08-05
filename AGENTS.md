@@ -38,7 +38,7 @@ loop-looper/
 - File names in PascalCase to match Swift/Xcode conventions.
 - Keep the app minimal. No features beyond looping unless explicitly asked.
 - Video files in `LoopLooper/LoopLooper/video/` — folder sync bundles them as resources.
-- Active clip is `videoName` in `VideoLooper.swift` (`boreal`, `snow`, `path`, `river`, `aerial`). Don't commit large video files; `.gitignore` covers `*.mp4`, `*.mov`, etc.
+- Active clip is `videoName` in `VideoLooper.swift` (`snow`, `path`, `aerial`). Don't commit large video files; `.gitignore` covers `*.mp4`, `*.mov`, etc.
 
 ## Git & Commits
 
