@@ -1,6 +1,6 @@
 # LoopLooper
 
-A minimal Apple TV app that loops a single ambient video on loop, full-screen, forever. No controls, no menus — just video.
+A minimal Apple TV app that lists bundled ambient videos, then loops the one you pick full-screen forever.
 
 ## Why
 
@@ -8,10 +8,10 @@ Existing Apple TV apps charge for more than a couple free video loops. This one 
 
 ## What it does
 
-1. Launches
-2. Plays one video
-3. Loops it seamlessly
-4. That's it
+1. Launches to a home list of available clips
+2. You pick a video
+3. It loops seamlessly full-screen
+4. Menu / back on the Siri Remote returns to the list
 
 ## Requirements
 
@@ -35,14 +35,13 @@ In Xcode:
 
 ## Choose / add a video
 
-Test clips live in `LoopLooper/LoopLooper/video/` (gitignored). Switch the active one by changing `videoName` in `VideoLooper.swift`:
+Test clips live in `LoopLooper/LoopLooper/video/` (gitignored):
 
 `snow` · `path` · `aerial`
 
-Drop any other `*.mp4` there and point `videoName` at its basename.
+Drop any other `*.mp4` there and rebuild — it shows up on the home list automatically.
 
 ## Tech
 
-- tvOS + SwiftUI
+- tvOS + SwiftUI (`NavigationStack` home list)
 - AVPlayerLooper + AVQueuePlayer for seamless looping
-- ~60 lines of Swift

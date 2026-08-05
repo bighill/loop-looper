@@ -1,6 +1,6 @@
 # Video files
 
-Local test clips (gitignored). Change `videoName` in `VideoLooper.swift` to pick one:
+Local test clips (gitignored). The home screen lists every `*.mp4` in this folder after you rebuild:
 
 | Name | Clip |
 |------|------|

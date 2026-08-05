@@ -4,7 +4,7 @@ Apple TV ambient video looper. Personal project — sideloaded to Apple TV via X
 
 ## Project
 
-A minimal tvOS app that bundles a single video file and loops it seamlessly full-screen on Apple TV. No controls, no menus — just play on launch.
+A minimal tvOS app that lists bundled video files on a home screen, then loops the chosen clip seamlessly full-screen on Apple TV. Menu / back returns to the list.
 
 ## Tech
 
@@ -31,7 +31,7 @@ loop-looper/
     ├── LoopLooper.xcodeproj/   # Xcode project (folder bundle)
     └── LoopLooper/
         ├── LoopLooperApp.swift   # app entry point
-        ├── ContentView.swift     # main view (full-screen video)
+        ├── ContentView.swift     # home list + navigation to looper
         ├── VideoLooper.swift     # AVPlayerLooper wrapper
         ├── Assets.xcassets/      # app icon, top shelf, accent
         └── video/                # bundled video files go here
@@ -43,7 +43,7 @@ loop-looper/
 - File names in PascalCase to match Swift/Xcode conventions.
 - Keep the app minimal. No features beyond looping unless explicitly asked.
 - Video files in `LoopLooper/LoopLooper/video/` — folder sync bundles them as resources.
-- Active clip is `videoName` in `VideoLooper.swift` (`snow`, `path`, `aerial`). Don't commit large video files; `.gitignore` covers `*.mp4`, `*.mov`, etc.
+- Home list discovers bundled `*.mp4` at runtime; selection passes `videoName` into `VideoLooperView`. Don't commit large video files; `.gitignore` covers `*.mp4`, `*.mov`, etc.
 
 ## Git & Commits
 
