@@ -6,7 +6,7 @@ import AVKit
 struct VideoLooperView: UIViewControllerRepresentable {
     /// Active clip — change this to try a different video.
     /// Options: "boreal", "snow", "path", "river", "aerial"
-    private let videoName = "river"
+    private let videoName = "boreal"
 
     func makeCoordinator() -> Coordinator {
         Coordinator()
