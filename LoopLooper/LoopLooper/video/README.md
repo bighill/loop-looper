@@ -7,5 +7,6 @@ Local test clips (gitignored). The home screen lists every `*.mp4` in this folde
 | `snow` | Snowy evergreen canopy |
 | `path` | Forest pathway |
 | `aerial` | Expansive evergreen aerial |
+| `suburb` | Calm suburban aerial |
 
 All from [Pexels](https://www.pexels.com/) (free license), re-encoded locally to 1080p H.264 for lighter simulator/device loads. Dropped into this folder as `*.mp4`; the Xcode folder sync bundles them automatically.
