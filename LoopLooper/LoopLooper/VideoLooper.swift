@@ -4,7 +4,7 @@ import AVKit
 /// Seamless infinite video loop using AVPlayerLooper.
 /// Plays a single bundled video file full-screen, forever.
 struct VideoLooperView: UIViewControllerRepresentable {
-    /// Basename of a bundled `.mp4` (e.g. "snow", "path", "aerial").
+    /// Basename of a bundled `.mp4` (e.g. "tahiti-waves").
     let videoName: String
 
     func makeCoordinator() -> Coordinator {

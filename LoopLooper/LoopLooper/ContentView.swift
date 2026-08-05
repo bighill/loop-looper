@@ -18,7 +18,7 @@ struct ContentView: View {
                     )
                 } else {
                     List(videoNames, id: \.self) { name in
-                        NavigationLink(name.capitalized) {
+                        NavigationLink(displayName(for: name)) {
                             VideoLooperView(videoName: name)
                                 .ignoresSafeArea()
                         }
@@ -27,6 +27,13 @@ struct ContentView: View {
             }
             .navigationTitle("LoopLooper")
         }
+    }
+
+    private func displayName(for name: String) -> String {
+        name
+            .replacingOccurrences(of: "-", with: " ")
+            .replacingOccurrences(of: "_", with: " ")
+            .capitalized
     }
 }
 

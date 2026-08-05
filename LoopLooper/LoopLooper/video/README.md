@@ -1,12 +1,14 @@
 # Video files
 
-Local test clips (gitignored). The home screen lists every `*.mp4` in this folder after you rebuild:
+Local clips (gitignored). The home screen lists every `*.mp4` in this folder after you rebuild.
+
+Currently Apple TV aerials from this Mac’s `idleassetsd` cache, re-encoded to 1080p H.264 for a lighter app bundle:
 
 | Name | Clip |
 |------|------|
-| `snow` | Snowy evergreen canopy |
-| `path` | Forest pathway |
-| `aerial` | Expansive evergreen aerial |
-| `suburb` | Calm suburban aerial |
+| `antarctica-aurora` | Antarctica’s Southern Lights |
+| `tahiti-waves` | Tahiti Coast / waves |
+| `redwoods-above` | Del Norte Coast Redwoods from above |
+| `redwoods-river` | Redwoods river |
 
-All from [Pexels](https://www.pexels.com/) (free license), re-encoded locally to 1080p H.264 for lighter simulator/device loads. Dropped into this folder as `*.mp4`; the Xcode folder sync bundles them automatically.
+Source: `/Library/Application Support/com.apple.idleassetsd/Customer/4KSDR240FPS/` (see repo-root `apple-tv-aerials.md`). Dropped into this folder as `*.mp4`; the Xcode folder sync bundles them automatically.
