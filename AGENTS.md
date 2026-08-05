@@ -22,6 +22,11 @@ loop-looper/
 ├── AGENTS.md          # this file
 ├── README.md          # human overview
 ├── .gitignore         # ignores video media + Xcode user data
+├── .cursor/
+│   ├── mcp.json       # Xcode mcpbridge + XcodeBuildMCP
+│   └── skills/        # agent skills (incl. XcodeBuildMCP)
+├── .xcodebuildmcp/
+│   └── config.yaml    # scheme/platform/workflow defaults
 └── LoopLooper/        # Xcode project + source
     ├── LoopLooper.xcodeproj/   # Xcode project (folder bundle)
     └── LoopLooper/
@@ -56,3 +61,12 @@ Committed `851a094 — moss: refresh markdown docs and require auto commit/push`
 - Xcode projects are folder bundles — `LoopLooper.xcodeproj` is a directory, not a single file. Don't try to edit it as text.
 - Open in Xcode with `open LoopLooper/LoopLooper.xcodeproj`.
 - For sideloading: connect Apple TV to the same network, select it as a run destination in Xcode, build and run.
+
+## Xcode MCP
+
+Cursor is configured with two MCP servers in `.cursor/mcp.json`:
+
+1. **`xcode`** — Apple’s `mcpbridge` (IDE context, build/test via open Xcode). Requires Xcode running with this project open, and **Xcode → Settings → Intelligence → Model Context Protocol → Allow external agents to use Xcode tools**.
+2. **`XcodeBuildMCP`** — build/run/device/simulator tooling. Defaults live in `.xcodebuildmcp/config.yaml` (scheme `LoopLooper`, platform `tvOS`, bundle id `com.lex.LoopLooper`). Prefer its tools over raw `xcodebuild`/`devicectl`. Read `.cursor/skills/xcodebuildmcp/SKILL.md` before calling them.
+
+After adding or changing MCP servers, reload MCP in Cursor (Settings → MCP) or restart the agent session.

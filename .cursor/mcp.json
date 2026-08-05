@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "xcode": {
+      "command": "/Applications/Xcode.app/Contents/Developer/usr/bin/mcpbridge"
+    },
+    "XcodeBuildMCP": {
+      "command": "npx",
+      "args": ["-y", "xcodebuildmcp@latest", "mcp"]
+    }
+  }
+}
