@@ -2,18 +2,26 @@
 
 ## Where They Live on Disk
 
+**macOS wallpaper / screensaver downloads (primary on this machine):**
+
+```
+~/Library/Application Support/com.apple.wallpaper/aerials/videos/
+```
+
+System Settings → Wallpaper / Screen Saver writes here when you download an
+aerial. Filenames are the asset UUID + `.mov`.
+
+**Legacy Apple TV idleassetsd cache (partial mirror):**
+
 ```
 /Library/Application Support/com.apple.idleassetsd/Customer/4KSDR240FPS/
 ```
 
-That is the only tier with downloaded content on this machine.
-Empty sibling folders exist for other quality tiers:
+Currently holds only the four older downloads (Antarctica, Tahiti, both
+Redwoods). Empty sibling tiers: `2KSDR/`, `2KHDR/`, `4KSDR/`, `4KHDR/`,
+`2KAVC/`.
 
-- `2KSDR/` — 1080p SDR
-- `2KHDR/` — 1080p HDR
-- `4KSDR/` — 4K SDR (standard frame rate)
-- `4KHDR/` — 4K HDR
-- `4KSDR240FPS/` — 4K SDR 240fps (active)
+When looking for newly downloaded clips, check the wallpaper path first.
 
 ## Format
 
@@ -29,47 +37,63 @@ Empty sibling folders exist for other quality tiers:
 
 ## Catalog Metadata
 
+**Wallpaper (current, 156 assets):**
+
+- **Manifest:** `~/Library/Application Support/com.apple.wallpaper/aerials/manifest/entries.json`
+- **Localized names:** `…/TVIdleScreenStrings.bundle/…/Localizable.nocache.loctable` (`en` → `*_NAME` keys)
+
+**idleassetsd (older, 137 assets — missing newer entries like Tahoe Day):**
+
 - **Manifest:** `/Library/Application Support/com.apple.idleassetsd/Customer/entries.json`
-- **Localized names:** `TVIdleScreenStrings.bundle/en.lproj/Localizable.nocache.strings`
 - **SQLite index:** `/Library/Application Support/com.apple.idleassetsd/Aerial.sqlite`
-- **Total catalog entries:** 137
-- **Downloaded on this machine:** 4
+
+- **Downloaded on this machine:** 8 (all under the wallpaper `videos/` folder)
 
 ## Downloaded Videos
 
 | Name | Shot ID | File | Size | Duration |
 |------|---------|------|------|----------|
-| Antarctica's Southern Lights | GMT110_112NC_364D_1054_AURORA_ANTARCTICA | `03EC0F5E-...1182.mov` | 138 MB | 2m 17s |
-| Tahiti Waves | TH_804_A001_8 | `8C31B06F-...48B9.mov` | 124 MB | 1m 24s |
+| Antarctica’s Southern Lights | GMT110_112NC_364D_1054_AURORA_ANTARCTICA | `03EC0F5E-...1182.mov` | 138 MB | 2m 17s |
+| Iceland Glacier | I003_C008 | `DDE50C77-...1FFE.mov` | 518 MB | 5m 21s |
+| New York Night | N013_C004 | `44166C39-...B52F.mov` | 257 MB | 4m 00s |
+| Palau Jellies Dark | PA_A001_C007 | `BA4ECA11-...EB28.mov` | 639 MB | 7m 09s |
 | Redwoods | R013_C039_F01 | `97447D85-...5853.mov` | 576 MB | 5m 46s |
 | Del Norte Coast Redwoods State Park, California | R010_C003_F01 | `AA5E82B9-...7275.mov` | 461 MB | 5m 7s |
+| Tahiti Waves | TH_804_A001_8 | `8C31B06F-...48B9.mov` | 124 MB | 1m 24s |
+| Tahoe Day | TA_L_002 | `4C108785-...5550.mov` | 445 MB | 5m 00s |
 
-**Total disk usage:** ~1.3 GB
+**Total disk usage:** ~3.2 GB (wallpaper `videos/`)
 
 ## Downloading More Videos
 
-Each entry in `entries.json` has a `url-4K-SDR-240FPS` field pointing to
-`sylvan.apple.com`. Download with curl and place the file in the
-`4KSDR240FPS/` directory using the entry's UUID as the filename:
+Easiest: System Settings → Wallpaper / Screen Saver → download the aerial.
+It lands in the wallpaper `videos/` folder above.
+
+Or pull from `sylvan.apple.com` using the wallpaper manifest (no sudo):
 
 ```bash
 UUID="<entry-id>"
+DEST="$HOME/Library/Application Support/com.apple.wallpaper/aerials/videos/${UUID}.mov"
 URL="$(python3 -c '
-import json
-data = json.load(open('/Library/Application Support/com.apple.idleassetsd/Customer/entries.json'))
-for a in data['assets']:
-    if a["id"] == "$UUID":
+import json, os
+path = os.path.expanduser("~/Library/Application Support/com.apple.wallpaper/aerials/manifest/entries.json")
+data = json.load(open(path))
+for a in data["assets"]:
+    if a["id"] == "'"$UUID"'":
         print(a["url-4K-SDR-240FPS"])
-'"  )"
+')"
 
-curl -o "/Library/Application Support/com.apple.idleassetsd/Customer/4KSDR240FPS/${UUID}.mov" "$URL"
+curl -A "AppleTV14,1/17.0" -o "$DEST" "$URL"
 ```
 
-You may need `sudo` to write into that directory.
+The older idleassetsd `4KSDR240FPS/` directory needs `sudo` to write.
 
 ## Full Catalog
 
-All 137 entries, sorted alphabetically. ✅ = already downloaded.
+Legacy idleassetsd catalog (137 entries), sorted alphabetically.
+✅ = downloaded under wallpaper `videos/` (or idleassetsd mirror).
+Newer wallpaper-only assets (e.g. Tahoe Day) are listed under Downloaded
+Videos above but may be absent from this older table.
 
 | # | Name | Shot ID | Downloaded |
 |---|------|---------|------------|
@@ -128,7 +152,7 @@ All 137 entries, sorted alphabetically. ✅ = already downloaded.
 | 53 | Iceland Coast | I003_C004 | — |
 | 54 | Iceland Fjord | I003_C011 | — |
 | 55 | Iceland Fjord from Above | I004_C014 | — |
-| 56 | Iceland Glacier | I003_C008 | — |
+| 56 | Iceland Glacier | I003_C008 | ✅ |
 | 57 | Iceland Lake | I003_C005 | — |
 | 58 | Iceland Riverbed | I003_C015 | — |
 | 59 | Iceland Snow Caps | I005_C008 | — |
@@ -149,7 +173,7 @@ All 137 entries, sorted alphabetically. ✅ = already downloaded.
 | 74 | Middle East | A083_C002_1130KZ | — |
 | 75 | New York | GMT307_136NC_134K_8277_NY_NIGHT | — |
 | 76 | New York Midtown | N003_C006 | — |
-| 77 | New York Night | N013_C004 | — |
+| 77 | New York Night | N013_C004 | ✅ |
 | 78 | New York Skyline | N008_C003 | — |
 | 79 | New York from Above | N008_C009 | — |
 | 80 | New Zealand | A105_C003_0212CT | — |
@@ -161,7 +185,7 @@ All 137 entries, sorted alphabetically. ✅ = already downloaded.
 | 86 | Oregon Sunset | R006_C013_S05 | — |
 | 87 | Palau Coral Colors | PA_A004_C003 | — |
 | 88 | Palau Jellies Blue | PA_A002_C009 | — |
-| 89 | Palau Jellies Dark | PA_A001_C007 | — |
+| 89 | Palau Jellies Dark | PA_A001_C007 | ✅ |
 | 90 | Palau Jellies Light | PA_A010_C007 | — |
 | 91 | Patagonia Lake | P005_C002_1109E1 | — |
 | 92 | Patagonia Mountain | P001_C005_11059D | — |
@@ -507,7 +531,7 @@ when saving into the `4KSDR240FPS/` directory.
 - Shot: `I004_C014`
 - URL: https://sylvan.apple.com/itunes-assets/Aerials116/v4/cb/5b/50/cb5b5035-6701-619f-9065-3d7d0e5fbef4/I004_C014_UHD_SDR_FRC240fps_sdr_4k_qp20_240p_t2160_tsa.mov
 
-**Iceland Glacier** 
+**Iceland Glacier** ✅
 - UUID: `DDE50C77-B7CB-4488-9EB1-D1B13BF21FFE`
 - Shot: `I003_C008`
 - URL: https://sylvan.apple.com/itunes-assets/Aerials126/v4/ec/eb/c8/ecebc8d2-5486-c2b2-52ae-6f0ab2d6b65f/I003_C008__0623CJ_UHD_SDR_240fps_ace2a32f-f189-4206-ba4c-e395fb1b4ea4q23_sRGB_tsa.mov
@@ -622,7 +646,7 @@ when saving into the `4KSDR240FPS/` directory.
 - Shot: `N003_C006`
 - URL: https://sylvan.apple.com/itunes-assets/Aerials116/v4/cb/5b/50/cb5b5035-6701-619f-9065-3d7d0e5fbef4/comp_N003_C006_PS_v01_SDR_PS_20180925_240fps_d5d9b36c-937b-45b5-b57c-d532c300fc07q20_sRGB_tsa.mov
 
-**New York Night** 
+**New York Night** ✅
 - UUID: `44166C39-8566-4ECA-BD16-43159429B52F`
 - Shot: `N013_C004`
 - URL: https://sylvan.apple.com/itunes-assets/Aerials116/v4/cb/5b/50/cb5b5035-6701-619f-9065-3d7d0e5fbef4/comp_N013_C004_PS_v01_SDR_PS_20180925_FRC240fps_sdr_4k_qp22_240p_t2160_tsa.mov
@@ -686,7 +710,7 @@ when saving into the `4KSDR240FPS/` directory.
 - Shot: `PA_A002_C009`
 - URL: https://sylvan.apple.com/itunes-assets/Aerials116/v4/cb/5b/50/cb5b5035-6701-619f-9065-3d7d0e5fbef4/PA_A002_C009_SDR_20190730_ALT01_FRC_sdr_4k_qp20_240p_t2160_tsa.mov
 
-**Palau Jellies Dark** 
+**Palau Jellies Dark** ✅
 - UUID: `BA4ECA11-592F-4727-9221-D2A32A16EB28`
 - Shot: `PA_A001_C007`
 - URL: https://sylvan.apple.com/itunes-assets/Aerials116/v4/cb/5b/50/cb5b5035-6701-619f-9065-3d7d0e5fbef4/PA_A001_C007_SDR_20190717_240fps_7c3c9b51-37bd-415e-aee7-c18a096667e4q20_sRGB_tsa.mov
