@@ -25,7 +25,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle("Loop Looper")
+            .navigationTitle("LoopLooper")
         }
     }
 }
