@@ -55,12 +55,16 @@ After every successful commit+push, report it in this exact style (short SHA + s
 Committed `851a094 — moss: refresh markdown docs and require auto commit/push`
 ```
 
+## Deploy
+
+After any app code change (Swift/assets that affect the running app), rebuild and install on the Living Room Apple TV via XcodeBuildMCP `build_run_device` (platform `tvOS`). Do this without waiting to be asked. Docs-only changes do not need a device deploy. If the device is offline or signing fails, say so and stop — don't fall back to simulator unless asked.
+
 ## Agent-Friendly Notes
 
 - Repo root: `/Users/lex/github/loop-looper`.
 - Xcode projects are folder bundles — `LoopLooper.xcodeproj` is a directory, not a single file. Don't try to edit it as text.
 - Open in Xcode with `open LoopLooper/LoopLooper.xcodeproj`.
-- For sideloading: connect Apple TV to the same network, select it as a run destination in Xcode, build and run.
+- For sideloading: Apple TV on the same network; prefer XcodeBuildMCP `build_run_device` over manual Xcode runs.
 
 ## Xcode MCP
 

@@ -1,16 +1,14 @@
 schemaVersion: 1
-
-# Device-first for Apple TV sideload; keep discovery + IDE bridge available.
 enabledWorkflows:
   - project-discovery
   - device
   - simulator
   - xcode-ide
-
 sessionDefaults:
-  projectPath: "./LoopLooper/LoopLooper.xcodeproj"
-  scheme: "LoopLooper"
-  configuration: "Debug"
-  platform: "tvOS"
-  bundleId: "com.lex.LoopLooper"
+  projectPath: ./LoopLooper/LoopLooper.xcodeproj
+  scheme: LoopLooper
+  configuration: Debug
   preferXcodebuild: true
+  platform: tvOS
+  bundleId: com.lex.LoopLooper
+  deviceId: F471BF1B-BE14-5770-86A5-6194ADAE7E00
